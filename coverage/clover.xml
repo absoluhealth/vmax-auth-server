@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1722841451658" clover="3.2.0">
+  <project timestamp="1722841451658" name="All files">
+    <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4" elements="18" coveredelements="18" complexity="0" loc="10" ncloc="10" packages="1" files="1" classes="1"/>
+    <file name="tenant.service.js" path="C:\code\vmax\vmax-auth-server\vmax-auth-server\services\tenant.service.js">
+      <metrics statements="10" coveredstatements="10" conditionals="4" coveredconditionals="4" methods="4" coveredmethods="4"/>
+      <line num="4" count="1" type="stmt"/>
+      <line num="23" count="1" type="stmt"/>
+      <line num="25" count="5" type="stmt"/>
+      <line num="27" count="3" type="stmt"/>
+      <line num="33" count="1" type="stmt"/>
+      <line num="35" count="8" type="stmt"/>
+      <line num="37" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="1" type="stmt"/>
+      <line num="40" count="4" type="cond" truecount="2" falsecount="0"/>
+      <line num="44" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
