@@ -1,47 +1,39 @@
-
-
-
-const tenants = [{
-    name: 'vmax',
-    secretCode: '1234567891',
+const tenants = [
+  {
+    tenantId: "1",
+    name: "vmax",
+    secretCode: "1234567891",
     alowedOrigins: {
-        "http://localhost:4200": true,
+      "http://localhost:4200": true,
     },
-    apps: ['crm', 'app']
-},
-{
-    name: 'fit_dad',
-    secretCode: 'fitdad',
+    apps: ["crm", "app"],
+  },
+  {
+    tenantId: "2",
+    name: "fit_dad",
+    secretCode: "fitdad",
     alowedOrigins: {
-        "http://localhost:4200": true,
+      "http://localhost:4200": true,
     },
-    apps: ['crm', 'fitdad_app']
-}
-]
+    apps: ["crm", "fitdad_app"],
+  },
+];
 
+const isValidTenant = (tenantId, origin) => {
+  tenant = tenants.find((a) => a.tenantId == tenantId);
 
-const isValidTenant = (tenantName, origin) => {
-
-    tenant = tenants.find(a => a.name == tenantName);
-
-    return tenant != null
-  
-}
-
-
+  return tenant != null;
+};
 
 const isValidTenantOrigin = (tenantName, origin) => {
+  tenant = tenants.find((a) => a.name == tenantName);
 
-    tenant = tenants.find(a => a.name == tenantName);
+  if (!tenant) return false;
 
-    if (!tenant)
-        return false
-
-    return tenant.alowedOrigins[origin] && tenant.alowedOrigins[origin]== true
-  
-}
+  return tenant.alowedOrigins[origin] && tenant.alowedOrigins[origin] == true;
+};
 
 module.exports = {
-    isValidTenant,
-    isValidTenantOrigin
-}
+  isValidTenant,
+  isValidTenantOrigin,
+};
