@@ -1,3 +1,5 @@
+const e = require("express");
+
 const tenants = [
   {
     tenantId: "1",
@@ -30,7 +32,9 @@ const isValidTenantOrigin = (tenantName, origin) => {
 
   if (!tenant) return false;
 
-  return tenant.alowedOrigins[origin] && tenant.alowedOrigins[origin] == true;
+  if (tenant.alowedOrigins[origin] && tenant.alowedOrigins[origin] == true)
+    return true;
+  else return false;
 };
 
 module.exports = {
