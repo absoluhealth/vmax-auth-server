@@ -4,9 +4,12 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
 const session = require("express-session");
 const engine = require("ejs-mate");
-require("dotenv").config();
 const cors = require("cors");
+const dotenv = require("dotenv");
 
+require("dotenv").config();
+require("./config/sequelize.cjs");
+require("./models");
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -47,9 +50,10 @@ app.use("/api/auth/get-token", tenantMiddleware.tenantChecker);
 // app.use('/api/users', userRouter);
 
 const authRouter = require("./routes/auth.router");
+const tenantRouter = require("./routes/tenant.router");
 
 app.use("/api/auth", authRouter);
-
+app.use("/api/tenant", tenantRouter);
 app.get("/api/auth/new-login", (req, res) => {
   // Pass data to the EJS template
   return res.render("login", {

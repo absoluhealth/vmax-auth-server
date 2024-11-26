@@ -1,4 +1,5 @@
 const e = require("express");
+const Tenant = require("../models").sso_multi_tenant;
 
 const tenants = [
   {
@@ -37,7 +38,24 @@ const isValidTenantOrigin = (tenantName, origin) => {
   else return false;
 };
 
+const getAllTenant = async () => {
+  const Tenants = await Tenant.findAll({
+    limit: 10,
+  });
+
+  return Tenants;
+};
+
+// create a method to get tenant by id
+const getTenantById = async (id) => {
+  const tenant = await Tenant.findByPk(id);
+
+  return tenant;
+};
+
 module.exports = {
   isValidTenant,
   isValidTenantOrigin,
+  getAllTenant,
+  getTenantById,
 };
