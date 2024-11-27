@@ -25,4 +25,51 @@ const getTenant = async (req, res) => {
   }
 };
 
-module.exports = { getTenants, getTenant };
+// Create a method to insert new tenant
+const createTenant = async (req, res) => {
+  try {
+    const tenant = req.body;
+    const newTenant = await tenantService.createTenant(tenant);
+    return res.send(newTenant);
+  } catch (error) {
+    // logger.error(error);
+    return res.send("Cannot create Tenant.");
+  }
+};
+
+// Create a method to update the tenant
+const updateTenant = async (req, res) => {
+  try {
+    const tenant = req.body;
+    const newTenant = await tenantService.updateTenant(tenant);
+    return res.send(newTenant);
+  } catch (error) {
+    // logger.error(error);
+    return res.send("Cannot update Tenant.");
+  }
+};
+
+// Create a method to delete the tenant
+const deleteTenant = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const status = await tenantService.deleteTenant(id);
+    if (status == 0) {
+      return res.send("Tenant not found.");
+    }
+    if (status == 1) {
+      return res.send("Tenant deleted successfully.");
+    }
+  } catch (error) {
+    // logger.error(error);
+    return res.send("Cannot delete Tenant.");
+  }
+};
+
+module.exports = {
+  getTenants,
+  getTenant,
+  createTenant,
+  updateTenant,
+  deleteTenant,
+};

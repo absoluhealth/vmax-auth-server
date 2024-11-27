@@ -1,5 +1,5 @@
 const e = require("express");
-const Tenant = require("../models").sso_multi_tenant;
+const Tenant = require("../models").Tenant;
 
 const tenants = [
   {
@@ -53,9 +53,41 @@ const getTenantById = async (id) => {
   return tenant;
 };
 
+// Create a method to insert new tenant
+const createTenant = async (tenant) => {
+  const newTenant = await Tenant.create(tenant);
+
+  return newTenant;
+};
+
+// Create a method to update the tenant
+const updateTenant = async (tenant) => {
+  const newTenant = await Tenant.update(tenant, {
+    where: {
+      id: tenant.id,
+    },
+  });
+
+  return newTenant;
+};
+
+// Create a method to delete the tenant by id
+const deleteTenant = async (id) => {
+  const tenant = await Tenant.destroy({
+    where: {
+      id: id,
+    },
+  });
+
+  return tenant;
+};
+
 module.exports = {
   isValidTenant,
   isValidTenantOrigin,
   getAllTenant,
   getTenantById,
+  createTenant,
+  updateTenant,
+  deleteTenant,
 };

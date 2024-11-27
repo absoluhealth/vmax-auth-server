@@ -22,5 +22,5 @@ function model(sequelize) {
     status: { type: DataTypes.STRING, allowNull: false },
   };
   const options = {};
-  return sequelize.define("sso_multi_tenant", attributes, options);
+  return sequelize.define("Tenant", attributes, options);
 }

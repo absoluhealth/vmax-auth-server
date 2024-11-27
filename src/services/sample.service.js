@@ -9,14 +9,14 @@ const getAllSample = async () => {
 };
 
 const getSampleById = async (id) => {
-  // const sample = await Sample.findOne({
-  //   attributes: ["id", "name"],
-  //   where: {
-  //     id: id,
-  //   },
-  // });
+  const sample = await Sample.findOne({
+    attributes: ["id", "name"],
+    where: {
+      id: id,
+    },
+  });
 
-  const sample = await Sample.findByPk(id);
+  // const sample = await Sample.findByPk(id);
 
   return sample;
 };
