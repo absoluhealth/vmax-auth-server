@@ -10,18 +10,18 @@ const getTenants = async (req, res) => {
   } catch (error) {
     // logger.error(error);
     // return errorResponse(req, res, "Cannot fetch samples.");
-    return res.send(error.message);
+    return res.status(500).send("Cannot fetch Tenants.");
   }
 };
 
 const getTenant = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = Number(req.params.id);
     const sample = await tenantService.getTenantById(id);
     return res.send(sample);
   } catch (error) {
     // logger.error(error);
-    return res.send("Cannot fetch Tenant.");
+    return res.status(500).send("Cannot fetch Tenant.");
   }
 };
 
@@ -52,7 +52,7 @@ const updateTenant = async (req, res) => {
 // Create a method to delete the tenant
 const deleteTenant = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = Number(req.params.id);
     const status = await tenantService.deleteTenant(id);
     if (status == 0) {
       return res.send("Tenant not found.");

@@ -1,12 +1,13 @@
+const { successResponse, errorResponse, logger } = require("../helpers");
 const sampelModel = require("../services/sample.service");
 
 const getSamples = async (req, res) => {
   try {
     const sample = await sampelModel.getAllSample();
-    return res.send(sample);
+    return successResponse(req, res, sample);
   } catch (error) {
-    //logger.error(error);
-    return res.send("Cannot fetch samples.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot fetch samples.");
   }
 };
 
