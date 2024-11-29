@@ -1,7 +1,0 @@
-class AppController{
-
-    /*
-        Apps CRUD
-
-    */
-}
