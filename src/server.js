@@ -51,9 +51,11 @@ app.use("/api/auth/get-token", tenantMiddleware.tenantChecker);
 
 const authRouter = require("./routes/auth.router");
 const tenantRouter = require("./routes/tenant.router");
+const appRouter = require("./routes/app.router");
 
 app.use("/api/auth", authRouter);
 app.use("/api/tenant", tenantRouter);
+app.use("/api/app", appRouter);
 app.get("/api/auth/new-login", (req, res) => {
   // Pass data to the EJS template
   return res.render("login", {

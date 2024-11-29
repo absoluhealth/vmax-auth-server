@@ -25,6 +25,8 @@ module.exports = (sequelize, DataTypes) => {
       identity_id: {
         type: DataTypes.STRING,
       },
+      invalid_login_attempts: { type: DataTypes.TINYINT, defaultValue: 0 },
+      is_locked: { type: DataTypes.BOOLEAN, defaultValue: false },
       tenant_id: {
         type: DataTypes.INTEGER,
         references: {
