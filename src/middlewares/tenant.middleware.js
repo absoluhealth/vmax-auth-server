@@ -1,39 +1,37 @@
-
-const tenantService = require('../services/tenant.service')
-
+const tenantService = require("../services/tenant.service");
 
 //checks if tenant is valid
 const tenantChecker = (req, res, next) => {
+  const tenantId = req.headers["app-id"];
 
-    const tenantId = req.headers['tenant-id'];
-    
-    const { redirectUrl } = req.query;
+  const { redirectUrl } = req.query;
 
-    if (!tenantService.isValidTenant(tenantId, redirectUrl)) {
-        return res
-            .status(403)
-            .json({ message: "Access Denied. You're not allowed to access the VMax SSO server. " });
-    }
+  if (!tenantService.isValidTenant(tenantId, redirectUrl)) {
+    return res.status(403).json({
+      message:
+        "Access Denied. You're not allowed to access the VMax SSO server. ",
+    });
+  }
 
-next();
-}
+  next();
+};
 
 const tenantAndOriginChecker = (req, res, next) => {
+  const tenantId = req.headers["tenant-id"];
 
-    const tenantId = req.headers['tenant-id'];
-    
-    const { redirectUrl } = req.query;
+  const { redirectUrl } = req.query;
 
-    if (!tenantService.isValidTenantOrigin(tenantId, redirectUrl)) {
-        return res
-            .status(403)
-            .json({ message: "Access Denied. You're not allowed to access the VMax SSO server. " });
-    }
+  if (!tenantService.isValidTenantOrigin(tenantId, redirectUrl)) {
+    return res.status(403).json({
+      message:
+        "Access Denied. You're not allowed to access the VMax SSO server. ",
+    });
+  }
 
-next();
-}
+  next();
+};
 
-
-module.exports ={
-    tenantChecker,
-    tenantAndOriginChecker}
+module.exports = {
+  tenantChecker,
+  tenantAndOriginChecker,
+};

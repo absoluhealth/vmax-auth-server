@@ -1,6 +1,9 @@
 const { uuid } = require("uuidv4");
 const AunthenticationError = require("../helpers/exception");
 const jwt = require("jsonwebtoken");
+const Tenant = require("../models").Tenant;
+const App = require("../models").Application;
+const AppTenantMapping = require("../models").AppTenantMapping;
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -43,4 +46,25 @@ async function generateToken(user) {
   return token;
 }
 
-module.exports = { doLogin, generateToken };
+async function validateAppId(appId, redirectURL) {
+  const app = await AppTenantMapping.findByPk(appId);
+  if (app != null) {
+    if (app.status === "active") {
+      if (!app.login_redirect_uri == redirectURL) {
+        return "Redirect URL is not valid";
+      }
+
+      const tenant = await Tenant.findByPk(app.tenant_id);
+      if (tenant.status !== "active") {
+        return "Tenant is not active";
+      }
+    } else {
+      return "App is not active";
+    }
+  } else {
+    return "Invalid Request. App not found.";
+  }
+  return "";
+}
+
+module.exports = { doLogin, generateToken, validateAppId };

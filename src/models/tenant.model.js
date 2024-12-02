@@ -11,8 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       identifier: { type: DataTypes.UUID, allowNull: false },
       name: { type: DataTypes.STRING, allowNull: false },
       sso_provider: { type: DataTypes.STRING, allowNull: false },
-      client_id: { type: DataTypes.STRING, allowNull: false },
-      client_secret: { type: DataTypes.STRING, allowNull: false },
       status: {
         type: DataTypes.ENUM("active", "inactive"),
         defaultValue: "active",
@@ -29,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "tenant_id",
       as: "users",
     });
-    Tenant.hasMany(models.Application, {
-      foreignKey: "tenant_id",
+    Tenant.belongsTo(models.Tenant, {
+      foreignKey: "app_id",
       as: "applications",
     });
   };

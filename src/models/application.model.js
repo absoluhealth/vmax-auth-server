@@ -10,39 +10,22 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
       },
-      login_redirect_uri: {
-        type: DataTypes.STRING,
-        get: function () {
-          return JSON.parse(this.getDataValue("value"));
-        },
-        set: function (value) {
-          this.setDataValue("value", JSON.stringify(value));
-        },
-      },
-      post_logout_redirect_uri: {
-        type: DataTypes.STRING,
-        get: function () {
-          return JSON.parse(this.getDataValue("value"));
-        },
-        set: function (value) {
-          this.setDataValue("value", JSON.stringify(value));
-        },
-      },
-      source_url: {
+      client_id: {
         type: DataTypes.STRING,
       },
-      auth_server_url: {
+      client_secret: {
         type: DataTypes.STRING,
       },
-      metadata_url: {
+      display_name: {
         type: DataTypes.STRING,
       },
-      tenant_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "tenants", // name of the target model
-          key: "id", // key in the target model that we're referencing
-        },
+      app_url: {
+        type: DataTypes.STRING,
+      },
+      status: {
+        type: DataTypes.ENUM("active", "inactive"),
+        defaultValue: "active",
+        allowNull: false,
       },
     },
     {
@@ -50,9 +33,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   Application.associate = function (models) {
-    Application.belongsTo(models.Tenant, {
-      foreignKey: "tenant_id",
+    Application.hasMany(models.Tenant, {
+      foreignKey: "app_id",
       as: "tenants",
+    });
+
+    Application.hasMany(models.Tenant, {
+      foreignKey: "app_id",
+      as: "app_tenant_mapings",
     });
   };
   return Application;

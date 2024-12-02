@@ -15,16 +15,21 @@ stored in server mememory.
 */
 
 async function login(req, res, next) {
-  const { redirectUrl, tenantId } = req.query;
+  const { redirectUrl, appId } = req.query;
 
-  if (tenantId == null)
-    return res.json(403, "Invalid Request. Tenant Id is missing");
+  if (appId == null)
+    return res.status(403).json("Invalid Request. App Id is missing");
 
   if (redirectUrl == null)
     return res.json(403, "Invalid Request. Redirect URL is missing");
 
-  if (session[tenantId] != null && redirectUrl != null) {
-    const sessionId = Object.keys(session[tenantId])[0];
+  var error = await authService.validateAppId(appId, redirectUrl);
+  if (error !== "") {
+    return res.status(403).json(error);
+  }
+
+  if (session[appId] != null && redirectUrl != null) {
+    const sessionId = Object.keys(session[appId])[0];
 
     if (sessionId != null) console.log(sessionId);
 
@@ -37,10 +42,9 @@ async function login(req, res, next) {
 }
 
 async function doLogin(req, res, next) {
-  const { redirectUrl, tenantId } = req.query;
+  const { redirectUrl, appId } = req.query;
 
-  if (tenantId == null)
-    return res.json(403, "Invalid Request. Tenant Id is missing");
+  if (appId == null) return res.json(403, "Invalid Request. App Id is missing");
 
   if (redirectUrl == null)
     return res.json(403, "Invalid Request. Redirect URL is missing");
@@ -57,9 +61,9 @@ async function doLogin(req, res, next) {
   try {
     const { sessionId, user } = await authService.doLogin(email, password);
 
-    if (!session[tenantId]) session[tenantId] = {};
+    if (!session[appId]) session[appId] = {};
 
-    session[tenantId][sessionId] = user;
+    session[appId][sessionId] = user;
 
     console.log(session);
 
@@ -70,20 +74,16 @@ async function doLogin(req, res, next) {
 }
 
 async function getToken(req, res, next) {
-  const tenantId = req.headers["tenant-id"];
+  const appId = req.headers["tenant-id"];
   const { sessionId } = req.query;
 
   console.log(session);
 
-  if (
-    !sessionId ||
-    !session[tenantId] ||
-    session[tenantId][sessionId] == null
-  ) {
+  if (!sessionId || !session[appId] || session[appId][sessionId] == null) {
     return res.status(401).json({ message: "Invalid id. Login again. " });
   }
 
-  const user = session[tenantId][[sessionId]];
+  const user = session[appId][[sessionId]];
 
   console.log(user);
 
@@ -93,19 +93,18 @@ async function getToken(req, res, next) {
 }
 
 async function logout(req, res, next) {
-  const { sessionId, tenantId, redirectUrl } = req.query;
+  const { sessionId, appId, redirectUrl } = req.query;
 
-  if (tenantId == null)
-    return res.json(403, "Invalid Request. Tenant Id is missing");
+  if (appId == null) return res.json(403, "Invalid Request. App Id is missing");
 
   if (sessionId == null)
     return res.json(403, "Invalid Request. SessionId is missing");
 
-  if (!session[tenantId]) {
+  if (!session[appId]) {
     return res.send("Success");
   }
 
-  delete session[tenantId][sessionId];
+  delete session[appId][sessionId];
 
   if (redirectUrl) {
     return res.redirect(redirectUrl);
