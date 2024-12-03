@@ -2,7 +2,7 @@ const appService = require("../services/application.service");
 
 const session = {};
 
-const getApps = async (req, res) => {
+const getMappings = async (req, res) => {
   try {
     const app = await appService.getallApps();
     //return successResponse(req, res, app);
@@ -14,7 +14,7 @@ const getApps = async (req, res) => {
   }
 };
 
-const getApp = async (req, res) => {
+const getMapping = async (req, res) => {
   try {
     const id = Number(req.params.id);
     const app = await appService.getAppById(id);
@@ -25,7 +25,7 @@ const getApp = async (req, res) => {
   }
 };
 
-const createApp = async (req, res) => {
+const createMapping = async (req, res) => {
   try {
     const app = req.body;
     const newApp = await appService.createApp(app);
@@ -36,7 +36,7 @@ const createApp = async (req, res) => {
   }
 };
 
-const updateApp = async (req, res) => {
+const updateMapping = async (req, res) => {
   try {
     const app = req.body;
     const newApp = await appService.updateApp(app);
@@ -47,7 +47,7 @@ const updateApp = async (req, res) => {
   }
 };
 
-const deleteApp = async (req, res) => {
+const deleteMapping = async (req, res) => {
   try {
     const id = Number(req.params.id);
     const status = await appService.deleteApp(id);
@@ -64,9 +64,9 @@ const deleteApp = async (req, res) => {
 };
 
 module.exports = {
-  getApps,
-  getApp,
-  createApp,
-  updateApp,
-  deleteApp,
+  getMappings,
+  getMapping,
+  createMapping,
+  updateMapping,
+  deleteMapping,
 };

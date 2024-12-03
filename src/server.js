@@ -21,7 +21,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 const corsOptions = {
-  origin: "http://localhost:4200", // Replace with the allowed origin(s)
+  origin: "http://localhost:5200", // Replace with the allowed origin(s)
   methods: "GET,POST", // Allowed methods
   allowedHeaders: "Content-Type,Authorization, tenant-id", // Allowed headers
 };

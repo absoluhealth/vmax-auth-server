@@ -1,11 +1,13 @@
+const tenantInputModel = require("../dto/tenant.input.model");
 const tenantService = require("../services/tenant.service");
+const mappingService = require("../services/app_tenant_mapping.service");
 
 const session = {};
 
 const getTenants = async (req, res) => {
   try {
     const sample = await tenantService.getAllTenant();
-    //return successResponse(req, res, sample);
+
     return res.send(sample);
   } catch (error) {
     // logger.error(error);
@@ -28,9 +30,17 @@ const getTenant = async (req, res) => {
 // Create a method to insert new tenant
 const createTenant = async (req, res) => {
   try {
-    const tenant = req.body;
-    const newTenant = await tenantService.createTenant(tenant);
-    return res.send(newTenant);
+    const tenant = new tenantInputModel.TenantInput(req.body);
+    if (tenant.apps && tenant.apps.length > 0) {
+      const newTenant = await tenantService.createTenant(tenant);
+      tenant.apps.forEach(async function (element) {
+        await mappingService.createMapping(element);
+      });
+      return res.send(newTenant);
+    } else {
+      const newTenant = await tenantService.createTenant(tenant);
+      return res.send(newTenant);
+    }
   } catch (error) {
     // logger.error(error);
     return res.send("Cannot create Tenant.");

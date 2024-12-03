@@ -66,8 +66,8 @@ async function doLogin(req, res, next) {
     session[appId][sessionId] = user;
 
     console.log(session);
-
-    return res.redirect(redirectUrl + "?uuid=" + sessionId);
+    var redirect = redirectUrl + "?uuid=" + sessionId;
+    return res.status(200).json({ redirect });
   } catch (exception) {
     return next(exception);
   }
