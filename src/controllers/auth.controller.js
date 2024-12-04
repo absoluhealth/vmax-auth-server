@@ -59,7 +59,12 @@ async function doLogin(req, res, next) {
     });
 
   try {
-    const { sessionId, user } = await authService.doLogin(email, password);
+    const { sessionId, user } = await authService.doLogin(
+      email,
+      password,
+      "",
+      appId
+    );
 
     if (!session[appId]) session[appId] = {};
 
@@ -74,16 +79,21 @@ async function doLogin(req, res, next) {
 }
 
 async function getToken(req, res, next) {
-  const appId = req.headers["tenant-id"];
+  const appId = req.headers["app-id"];
   const { sessionId } = req.query;
 
   console.log(session);
 
-  if (!sessionId || !session[appId] || session[appId][sessionId] == null) {
+  var session = await authService.getUserSessionById(sessionId);
+
+  if (!sessionId || !session || session == null) {
     return res.status(401).json({ message: "Invalid id. Login again. " });
   }
 
-  const user = session[appId][[sessionId]];
+  const user = session.user;
+  if (authService.deleteUserSession(session.id) == 0) {
+    return res.status(401).json({ message: "Invalid id. Login again. " });
+  }
 
   console.log(user);
 

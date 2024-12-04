@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Tenant = require("../models").Tenant;
 const App = require("../models").Application;
 const AppTenantMapping = require("../models").AppTenantMapping;
+const UserSession = require("../models").UserSession;
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -36,6 +37,11 @@ async function doLogin(email, password, redirectURL, tenantId) {
   }
 
   const sessionId = uuid();
+  createUserSession({
+    identifier: sessionId,
+    user: user,
+    appId: tenantId,
+  });
 
   return { sessionId: sessionId, user: user };
 }
@@ -67,4 +73,38 @@ async function validateAppId(appId, redirectURL) {
   return "";
 }
 
-module.exports = { doLogin, generateToken, validateAppId };
+const createUserSession = async (session) => {
+  const result = await UserSession.create(session);
+
+  return result;
+};
+
+const deleteUserSession = async (id) => {
+  const result = await UserSession.destroy({
+    where: {
+      id: id,
+    },
+  });
+
+  return result;
+};
+
+const getUserSessionById = async (id) => {
+  const session = await UserSession.findOne({
+    attributes: ["id", "user", "appId"],
+    where: {
+      identifier: id,
+    },
+  });
+
+  return session;
+};
+
+module.exports = {
+  doLogin,
+  generateToken,
+  validateAppId,
+  getUserSessionById,
+  createUserSession,
+  deleteUserSession,
+};
