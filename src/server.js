@@ -21,9 +21,9 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 
 const corsOptions = {
-  origin: "http://localhost:5200", // Replace with the allowed origin(s)
+  origin: "http://localhost:4200", // Replace with the allowed origin(s)
   methods: "GET,POST", // Allowed methods
-  allowedHeaders: "Content-Type,Authorization, tenant-id", // Allowed headers
+  allowedHeaders: "Content-Type,Authorization, app-id", // Allowed headers
 };
 app.use(cors(corsOptions));
 
@@ -39,6 +39,7 @@ app.use(
 /*************************MIDDLEWARES***************************/
 
 const tenantMiddleware = require("./middlewares/tenant.middleware");
+const validateToken = require("./middlewares/token_validater.middleware");
 // app.use('/api/auth/login', tenantMiddleware.tenantAndOriginChecker);
 app.use("/api/auth/get-token", tenantMiddleware.tenantChecker);
 // app.use('/api/auth/logout', tenantMiddleware.tenantChecker);
@@ -53,11 +54,13 @@ const authRouter = require("./routes/auth.router");
 const tenantRouter = require("./routes/tenant.router");
 const appRouter = require("./routes/app.router");
 const appMappingRouter = require("./routes/app_tenant_mapping.router");
+const userRouter = require("./routes/user.router");
 
 app.use("/api/auth", authRouter);
 app.use("/api/tenant", tenantRouter);
 app.use("/api/app", appRouter);
 app.use("/api/mapping", appMappingRouter);
+app.use("/api/user", validateToken, userRouter);
 app.get("/api/auth/new-login", (req, res) => {
   // Pass data to the EJS template
   return res.render("login", {

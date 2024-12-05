@@ -28,13 +28,13 @@ async function login(req, res, next) {
     return res.status(403).json(error);
   }
 
-  if (session[appId] != null && redirectUrl != null) {
-    const sessionId = Object.keys(session[appId])[0];
+  // if (session[appId] != null && redirectUrl != null) {
+  //   const sessionId = Object.keys(session[appId])[0];
 
-    if (sessionId != null) console.log(sessionId);
+  //   if (sessionId != null) console.log(sessionId);
 
-    return res.redirect(redirectUrl + "?uuid=" + sessionId);
-  }
+  //   return res.redirect(redirectUrl + "?uuid=" + sessionId);
+  // }
 
   return res.render("login", {
     title: "SSO-Server | Login",
@@ -110,11 +110,11 @@ async function logout(req, res, next) {
   if (sessionId == null)
     return res.json(403, "Invalid Request. SessionId is missing");
 
-  if (!session[appId]) {
-    return res.send("Success");
-  }
+  // if (!session[appId]) {
+  //   return res.send("Success");
+  // }
 
-  delete session[appId][sessionId];
+  // delete session[appId][sessionId];
 
   if (redirectUrl) {
     return res.redirect(redirectUrl);

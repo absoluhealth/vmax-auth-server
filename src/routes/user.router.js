@@ -1,6 +1,15 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const UserController = require('../controllers/user.controller');
+const UserController = require("../controllers/user.controller");
+
+router
+  .get("/", UserController.getAllUsers)
+  .get("/:id", UserController.getUser)
+  .post("/", UserController.createUser)
+  .put("/", UserController.updateUser)
+  .delete("/", UserController.deleteUser)
+  .put("/:id/change-password", UserController.changePassword)
+  .put("/:id/resetpassword", UserController.resetPassword);
 
 /**
  * @swagger
@@ -41,15 +50,13 @@ const UserController = require('../controllers/user.controller');
  *           example: 'vmax'
  */
 
-
-
 // Handle the /users endpoint
 /**
  * @swagger
  * /api/users?tenant-id :
  *   get:
  *     summary: Get users list.
- *     description: Get all the users in a tenant. 
+ *     description: Get all the users in a tenant.
  *     parameters:
  *       - in: query
  *         name: tenant-id
@@ -73,7 +80,6 @@ const UserController = require('../controllers/user.controller');
  *       '401':
  *         description: Unauthorized
  */
-router.get('/', UserController.getAllUsers);
 
 /**
  * @swagger
@@ -110,8 +116,6 @@ router.get('/', UserController.getAllUsers);
  *       '401':
  *         description: Unauthorized
  */
-router.get('/:id', UserController.getUser);
-
 
 /**
  * @swagger
@@ -143,7 +147,6 @@ router.get('/:id', UserController.getUser);
  *       '401':
  *         description: Unauthorized
  */
-router.post('/', UserController.createUser);
 /**
  * @swagger
  * /api/users/:id:
@@ -155,7 +158,7 @@ router.post('/', UserController.createUser);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: header
@@ -179,7 +182,6 @@ router.post('/', UserController.createUser);
  *       '401':
  *         description: Unauthorized
  */
-router.put('/', UserController.updateUser);
 
 /**
  * @swagger
@@ -192,7 +194,7 @@ router.put('/', UserController.updateUser);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: header
@@ -211,8 +213,6 @@ router.put('/', UserController.updateUser);
  *       '401':
  *         description: Unauthorized
  */
-router.delete('/', UserController.deleteUser);
-
 
 /**
  * @swagger
@@ -225,7 +225,7 @@ router.delete('/', UserController.deleteUser);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: header
@@ -238,8 +238,8 @@ router.delete('/', UserController.deleteUser);
  *         name: ChangePassword
  *         description: Password model.
  *         schema:
- *           $ref: '#/components/schemas/ChangePassword' 
- * 
+ *           $ref: '#/components/schemas/ChangePassword'
+ *
  *     responses:
  *       '200':
  *         description: A successful response with user info
@@ -250,7 +250,6 @@ router.delete('/', UserController.deleteUser);
  *       '401':
  *         description: Unauthorized
  */
-router.put('/:id/change-password', UserController.changePassword);
 /**
  * @swagger
  * /api/users/:id/reset-password:
@@ -262,7 +261,7 @@ router.put('/:id/change-password', UserController.changePassword);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema: 
+ *         schema:
  *           type: string
  *         required: true
  *       - in: header
@@ -275,7 +274,7 @@ router.put('/:id/change-password', UserController.changePassword);
  *         name: ResetPassword
  *         description: Password model.
  *         schema:
- *           $ref: '#/components/schemas/ResetPassword' 
+ *           $ref: '#/components/schemas/ResetPassword'
  *     responses:
  *       '200':
  *         description: A successful response with user info
@@ -286,8 +285,6 @@ router.put('/:id/change-password', UserController.changePassword);
  *       '401':
  *         description: Unauthorized
  */
-router.put('/:id/resetpassword', UserController.resetPassword);
-
 
 // Add more routes for the /users endpoint as needed
 
