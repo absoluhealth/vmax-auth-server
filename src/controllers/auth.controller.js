@@ -66,11 +66,11 @@ async function doLogin(req, res, next) {
       appId
     );
 
-    if (!session[appId]) session[appId] = {};
+    // if (!session[appId]) session[appId] = {};
 
-    session[appId][sessionId] = user;
+    // session[appId][sessionId] = user;
 
-    console.log(session);
+    //  console.log(session);
     var redirect = redirectUrl + "?uuid=" + sessionId;
     return res.status(200).json({ redirect });
   } catch (exception) {
@@ -90,12 +90,15 @@ async function getToken(req, res, next) {
     return res.status(401).json({ message: "Invalid id. Login again. " });
   }
 
+  if (new Date(session.expiresAt) <= new Date()) {
+    authService.deleteUserSession(session.id);
+    return res.status(401).json({ message: "Session has expired." });
+  }
+
   const user = session.user;
   if (authService.deleteUserSession(session.id) == 0) {
     return res.status(401).json({ message: "Invalid id. Login again. " });
   }
-
-  console.log(user);
 
   const token = await authService.generateToken(user);
 

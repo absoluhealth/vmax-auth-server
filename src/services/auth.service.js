@@ -37,10 +37,12 @@ async function doLogin(email, password, redirectURL, tenantId) {
   }
 
   const sessionId = uuid();
+  const expiresAt = new Date(Date.now() + 1 * 15 * 60 * 1000);
   createUserSession({
     identifier: sessionId,
     user: user,
     appId: tenantId,
+    expiresAt: expiresAt,
   });
 
   return { sessionId: sessionId, user: user };
@@ -56,7 +58,7 @@ async function validateAppId(appId, redirectURL) {
   const app = await AppTenantMapping.findByPk(appId);
   if (app != null) {
     if (app.status === "active") {
-      if (!app.login_redirect_uri == redirectURL) {
+      if (app.login_redirect_uri != redirectURL) {
         return "Redirect URL is not valid";
       }
 
@@ -91,7 +93,7 @@ const deleteUserSession = async (id) => {
 
 const getUserSessionById = async (id) => {
   const session = await UserSession.findOne({
-    attributes: ["id", "user", "appId"],
+    attributes: ["id", "user", "appId", "expiresAt"],
     where: {
       identifier: id,
     },

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       appId: {
         type: DataTypes.INTEGER,
       },
+      expiresAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
     },
     {
       tableName: "user_sessions",
