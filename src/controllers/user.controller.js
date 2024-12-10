@@ -1,12 +1,16 @@
+const userService = require("../services/user.service");
+
 class UserController {
   static getUser(req, res) {
-    const user = { name: "John Doe", email: "john@example.com" };
+    const user = userService.getUserById(req.params.id);
 
     res.json(user);
   }
 
   static getAllUsers(req, res) {
-    const users = [
+    const users = userService.getAllUsers();
+
+    users = [
       { name: "John Doe", email: "john@example.com" },
       { name: "Jane Smith", email: "jane@example.com" },
     ];
