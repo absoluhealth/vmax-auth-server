@@ -1,4 +1,4 @@
-class TenantInput {
+class TenantDTO {
   constructor({ id, identifier, name, sso_provider, status, apps }) {
     this.id = id;
     this.name = name;
@@ -10,7 +10,7 @@ class TenantInput {
 }
 
 // DTO for Table B Input
-class AppTenantMappingInput {
+class AppTenantMappingDTO {
   constructor({
     app_id,
     tenant_id,
@@ -42,4 +42,4 @@ class AppTenantMappingInput {
   }
 }
 
-module.exports = { TenantInput, AppTenantMappingInput };
+module.exports = { TenantDTO, AppTenantMappingDTO };

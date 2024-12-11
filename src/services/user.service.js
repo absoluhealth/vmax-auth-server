@@ -1,3 +1,5 @@
+const UserDTO = require("../dto/user.dto");
+const userAppMappingService = require("./user_app_mapping.service");
 const User = require("../models").User;
 
 const getAllUser = async () => {
@@ -37,12 +39,6 @@ const getUserByEmail = async (email, tenantId) => {
   return user;
 };
 
-const createUser = async (user) => {
-  const result = await User.create(user);
-
-  return result;
-};
-
 const updateUser = async (id, user) => {
   const result = await User.update(
     user, // Values to update
@@ -62,11 +58,20 @@ const deleteUser = async (id) => {
   return result;
 };
 
+const createUser = async (user) => {
+  const newUser = await User.create(user);
+  userAppMappingService.createUserAppMapping({
+    user_id: newUser.id,
+    app_id: user.app_map_id,
+  });
+  return newUser;
+};
+
 module.exports = {
   getAllUser,
   getUserById,
   getUserByEmail,
-  createUser,
   updateUser,
   deleteUser,
+  createUser,
 };

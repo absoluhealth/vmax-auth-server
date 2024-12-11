@@ -1,4 +1,4 @@
-const tenantInputModel = require("../dto/tenant.input.model");
+const tenantInputModel = require("../dto/tenant.dto");
 const tenantService = require("../services/tenant.service");
 const mappingService = require("../services/app_tenant_mapping.service");
 
@@ -30,17 +30,10 @@ const getTenant = async (req, res) => {
 // Create a method to insert new tenant
 const createTenant = async (req, res) => {
   try {
-    const tenant = new tenantInputModel.TenantInput(req.body);
-    if (tenant.apps && tenant.apps.length > 0) {
-      const newTenant = await tenantService.createTenant(tenant);
-      tenant.apps.forEach(async function (element) {
-        await mappingService.createMapping(element);
-      });
-      return res.send(newTenant);
-    } else {
-      const newTenant = await tenantService.createTenant(tenant);
-      return res.send(newTenant);
-    }
+    const tenant = new tenantInputModel.TenantDTO(req.body);
+
+    const newTenant = await tenantService.createTenant(tenant);
+    return res.send(newTenant);
   } catch (error) {
     // logger.error(error);
     return res.send("Cannot create Tenant.");

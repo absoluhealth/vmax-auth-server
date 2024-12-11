@@ -56,6 +56,11 @@ const getTenantById = async (id) => {
 // Create a method to insert new tenant
 const createTenant = async (tenant) => {
   const newTenant = await Tenant.create(tenant);
+  if (tenant.apps && tenant.apps.length > 0) {
+    for (const app of tenant.apps) {
+      await mappingService.createMapping(app);
+    }
+  }
 
   return newTenant;
 };

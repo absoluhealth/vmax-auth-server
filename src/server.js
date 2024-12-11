@@ -55,12 +55,15 @@ const tenantRouter = require("./routes/tenant.router");
 const appRouter = require("./routes/app.router");
 const appMappingRouter = require("./routes/app_tenant_mapping.router");
 const userRouter = require("./routes/user.router");
+const userAppMappingRouter = require("./routes/user_app_mapping.router");
 
 app.use("/api/auth", authRouter);
 app.use("/api/tenant", tenantRouter);
 app.use("/api/app", appRouter);
 app.use("/api/mapping", appMappingRouter);
 app.use("/api/user", validateToken, userRouter);
+app.use("/api/user-app-mapping", userAppMappingRouter);
+
 app.get("/api/auth/new-login", (req, res) => {
   // Pass data to the EJS template
   return res.render("login", {

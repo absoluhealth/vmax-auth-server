@@ -5,7 +5,7 @@ const session = {};
 const getApps = async (req, res) => {
   try {
     const app = await appService.getallApps();
-    //return successResponse(req, res, app);
+
     return res.send(app);
   } catch (error) {
     // logger.error(error);

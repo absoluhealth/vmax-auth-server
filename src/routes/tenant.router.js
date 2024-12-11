@@ -6,11 +6,11 @@ const SampelController = require("../controllers/sample.controller");
 
 router
   .get("/", TenantController.getTenants)
-  .get("/sample", SampelController.getSamples)
   .get("/:id", TenantController.getTenant)
   .post("/", TenantController.createTenant)
   .put("/", TenantController.updateTenant)
   .delete("/:id", TenantController.deleteTenant)
+  .get("/sample", SampelController.getSamples)
   .get("/sample/:id", SampelController.getSample)
   .post("/sample", SampelController.createSample);
 

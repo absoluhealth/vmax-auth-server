@@ -27,19 +27,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       invalid_login_attempts: { type: DataTypes.TINYINT, defaultValue: 0 },
       is_locked: { type: DataTypes.BOOLEAN, defaultValue: false },
-      tenant_id: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: "tenants", // name of the target model
-          key: "id", // key in the target model that we're referencing
-        },
-      },
+      is_deleted: { type: DataTypes.BOOLEAN, defaultValue: false },
+      last_login: { type: DataTypes.DATE },
     },
     {
       indexes: [
         {
           unique: true,
-          fields: ["user_name", "tenant_id", "identity_id"],
+          fields: ["user_name", "identity_id"],
         },
       ],
     },
