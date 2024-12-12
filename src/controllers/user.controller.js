@@ -12,9 +12,9 @@ class UserController {
     }
   }
 
-  static getAllUsers(req, res) {
+  static getUsers(req, res) {
     try {
-      const users = userService.getAllUsers();
+      const users = userService.getAllUser();
       return res.json(users);
     } catch (error) {
       return res.status(500).json({ message: error.message });

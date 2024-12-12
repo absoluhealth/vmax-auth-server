@@ -7,7 +7,7 @@ class UserDTO {
     email,
     first_name,
     last_name,
-    app_map_id
+    app_map_ids
   ) {
     this.id = id;
     this.username = username;
@@ -16,7 +16,7 @@ class UserDTO {
     this.email = email;
     this.first_name = first_name;
     this.last_name = last_name;
-    this.app_map_id = app_map_id;
+    this.app_map_ids = app_map_ids;
   }
 }
 

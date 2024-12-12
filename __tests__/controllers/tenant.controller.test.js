@@ -77,15 +77,9 @@ describe("Tenant Functions", () => {
     const mockTenant = {
       id: 1,
       name: "Sample1",
-      identifier: "de391193-7d35-4cce-beb6-26c57abb1968",
-      redirect_url: "http://localhost:5200",
-      source_url: "http://localhost:45200",
       sso_provider: "azure",
-      client_id: "123",
-      client_secret: "123",
-      auth_server_url: "http://localhost:5200",
-      metadata_url: "http://localhost:5200",
       status: "active",
+      apps: [],
     };
 
     TenantModel.getTenantById.mockResolvedValue(mockTenant);
@@ -103,15 +97,9 @@ describe("Tenant Functions", () => {
     const mockTenant = {
       id: 1,
       name: "Sample1",
-      identifier: "de391193-7d35-4cce-beb6-26c57abb1968",
-      redirect_url: "http://localhost:5200",
-      source_url: "http://localhost:45200",
       sso_provider: "azure",
-      client_id: "123",
-      client_secret: "123",
-      auth_server_url: "http://localhost:5200",
-      metadata_url: "http://localhost:5200",
       status: "active",
+      apps: [],
     };
 
     TenantModel.createTenant.mockResolvedValue(mockTenant);
@@ -129,15 +117,9 @@ describe("Tenant Functions", () => {
     const mockTenant = {
       id: 1,
       name: "Sample1",
-      identifier: "de391193-7d35-4cce-beb6-26c57abb1968",
-      redirect_url: "http://localhost:5200",
-      source_url: "http://localhost:45200",
       sso_provider: "azure",
-      client_id: "123",
-      client_secret: "123",
-      auth_server_url: "http://localhost:5200",
-      metadata_url: "http://localhost:5200",
       status: "active",
+      apps: [],
     };
 
     TenantModel.updateTenant.mockResolvedValue(mockTenant);
@@ -155,15 +137,9 @@ describe("Tenant Functions", () => {
     const mockTenant = {
       id: 1,
       name: "Sample1",
-      identifier: "de391193-7d35-4cce-beb6-26c57abb1968",
-      redirect_url: "http://localhost:5200",
-      source_url: "http://localhost:45200",
       sso_provider: "azure",
-      client_id: "123",
-      client_secret: "123",
-      auth_server_url: "http://localhost:5200",
-      metadata_url: "http://localhost:5200",
       status: "active",
+      apps: [],
     };
 
     TenantModel.deleteTenant.mockResolvedValue(1);

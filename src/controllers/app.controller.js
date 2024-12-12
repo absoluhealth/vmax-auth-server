@@ -4,7 +4,7 @@ const session = {};
 
 const getApps = async (req, res) => {
   try {
-    const app = await appService.getallApps();
+    const app = await appService.getAllApps();
 
     return res.send(app);
   } catch (error) {

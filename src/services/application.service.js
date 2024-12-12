@@ -1,7 +1,7 @@
 const e = require("express");
 const App = require("../models").Application;
 
-const getallApps = async () => {
+const getAllApps = async () => {
   const apps = await App.findAll({
     limit: 10,
   });
@@ -38,7 +38,7 @@ const deleteApp = async (id) => {
 };
 
 module.exports = {
-  getallApps,
+  getAllApps,
   getAppById,
   createApp,
   updateApp,

@@ -60,10 +60,13 @@ const deleteUser = async (id) => {
 
 const createUser = async (user) => {
   const newUser = await User.create(user);
-  userAppMappingService.createUserAppMapping({
-    user_id: newUser.id,
-    app_id: user.app_map_id,
+  user.app_map_ids.forEach((element) => {
+    userAppMappingService.createUserAppMapping({
+      user_id: newUser.id,
+      app_id: element,
+    });
   });
+
   return newUser;
 };
 
