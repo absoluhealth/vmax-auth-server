@@ -20,13 +20,17 @@ describe("Auth Functions", () => {
       "/login?redirectUrl=http://localhost:4200/home"
     );
     expect(response.statusCode).toBe(403);
-    expect(response.body).toBe("Invalid Request. App Id is missing");
+    expect(response.body.errorMessage).toBe(
+      "Invalid Request. App Id is missing"
+    );
   });
 
   test("should return 403 if redirectUrl is missing", async () => {
     const response = await request(app).get("/login?appId=1");
     expect(response.statusCode).toBe(403);
-    expect(response.body).toBe("Invalid Request. Redirect URL is missing");
+    expect(response.body.errorMessage).toBe(
+      "Invalid Request. Redirect URL is missing"
+    );
   });
 
   test("should return 403 if validateAppId returns an error", async () => {
@@ -36,7 +40,7 @@ describe("Auth Functions", () => {
       "/login?appId=1&redirectUrl=http://localhost:4200/home"
     );
     expect(response.statusCode).toBe(403);
-    expect(response.body).toBe("App is not active");
+    expect(response.body.errorMessage).toBe("App is not active");
   });
 
   //   test("should return 200 if login is successful", async () => {

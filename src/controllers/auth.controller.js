@@ -1,4 +1,5 @@
 const authService = require("../services/auth.service");
+const { errorResponse } = require("../lib/helper");
 
 const session = {};
 
@@ -18,14 +19,19 @@ async function login(req, res, next) {
   const { redirectUrl, appId } = req.query;
 
   if (appId == null)
-    return res.status(403).json("Invalid Request. App Id is missing");
+    return errorResponse(req, res, "Invalid Request. App Id is missing", 403);
 
   if (redirectUrl == null)
-    return res.json(403, "Invalid Request. Redirect URL is missing");
+    return errorResponse(
+      req,
+      res,
+      "Invalid Request. Redirect URL is missing",
+      403
+    );
 
   var error = await authService.validateAppId(appId, redirectUrl);
   if (error !== "") {
-    return res.status(403).json(error);
+    return errorResponse(req, res, error, 403);
   }
 
   // if (session[appId] != null && redirectUrl != null) {
@@ -44,10 +50,16 @@ async function login(req, res, next) {
 async function doLogin(req, res, next) {
   const { redirectUrl, appId } = req.query;
 
-  if (appId == null) return res.json(403, "Invalid Request. App Id is missing");
+  if (appId == null)
+    return errorResponse(req, res, "Invalid Request. App Id is missing", 403);
 
   if (redirectUrl == null)
-    return res.json(403, "Invalid Request. Redirect URL is missing");
+    return errorResponse(
+      req,
+      res,
+      "Invalid Request. Redirect URL is missing",
+      403
+    );
 
   //tenantCheck logic to be added here
 
@@ -87,17 +99,17 @@ async function getToken(req, res, next) {
   var session = await authService.getUserSessionById(sessionId);
 
   if (!sessionId || !session || session == null) {
-    return res.status(401).json({ message: "Invalid id. Login again. " });
+    return errorResponse(req, res, "Invalid id. Login again. ", 401);
   }
 
   if (new Date(session.expiresAt) <= new Date()) {
     authService.deleteUserSession(session.id);
-    return res.status(401).json({ message: "Session has expired." });
+    return errorResponse(req, res, "Session has expired.", 401);
   }
 
   const user = session.user;
   if (authService.deleteUserSession(session.id) == 0) {
-    return res.status(401).json({ message: "Invalid id. Login again. " });
+    return errorResponse(req, res, "Invalid id. Login again. ", 401);
   }
 
   const token = await authService.generateToken(user);
@@ -108,10 +120,16 @@ async function getToken(req, res, next) {
 async function logout(req, res, next) {
   const { sessionId, appId, redirectUrl } = req.query;
 
-  if (appId == null) return res.json(403, "Invalid Request. App Id is missing");
+  if (appId == null)
+    return errorResponse(req, res, "Invalid Request. App Id is missing", 403);
 
   if (sessionId == null)
-    return res.json(403, "Invalid Request. SessionId is missing");
+    return errorResponse(
+      req,
+      res,
+      "Invalid Request. SessionId is missing",
+      403
+    );
 
   // if (!session[appId]) {
   //   return res.send("Success");
@@ -122,7 +140,7 @@ async function logout(req, res, next) {
   if (redirectUrl) {
     return res.redirect(redirectUrl);
   }
-  return res.send("Success");
+  return errorResponse(req, res, "Success");
 }
 
 module.exports = { login, doLogin, getToken, logout };

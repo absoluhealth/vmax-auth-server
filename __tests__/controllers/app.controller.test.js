@@ -58,7 +58,7 @@ describe("App Functions", () => {
     const response = await request(app).get("/app");
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockApp);
+    expect(response.body.data).toEqual(mockApp);
   });
 
   test("should get App by id", async () => {
@@ -77,7 +77,7 @@ describe("App Functions", () => {
     const response = await request(app).get("/app/1");
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockApp);
+    expect(response.body.data).toEqual(mockApp);
   });
 
   test("should create App", async () => {
@@ -96,7 +96,7 @@ describe("App Functions", () => {
     const response = await request(app).post("/app").send(mockApp);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockApp);
+    expect(response.body.data).toEqual(mockApp);
   });
 
   test("should update App", async () => {
@@ -115,7 +115,7 @@ describe("App Functions", () => {
     const response = await request(app).put("/app").send(mockApp);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockApp);
+    expect(response.body.data).toEqual(mockApp);
   });
 
   test("should delete App", async () => {
@@ -137,7 +137,7 @@ describe("App Functions", () => {
     const response = await request(app).delete("/app/1");
 
     expect(response.status).toBe(200);
-    expect(response.text).toEqual("App deleted.");
+    expect(response.body.data).toEqual("App deleted.");
 
     expect(appService.deleteApp).toHaveBeenCalledWith(1);
   });

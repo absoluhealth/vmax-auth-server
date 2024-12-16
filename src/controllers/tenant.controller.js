@@ -1,29 +1,30 @@
 const tenantInputModel = require("../dto/tenant.dto");
 const tenantService = require("../services/tenant.service");
 const mappingService = require("../services/app_tenant_mapping.service");
+const { successResponse, errorResponse } = require("../lib/helper");
+const { logger } = require("../lib/helper");
 
 const session = {};
 
 const getTenants = async (req, res) => {
   try {
-    const sample = await tenantService.getAllTenant();
+    const tenant = await tenantService.getAllTenant();
 
-    return res.send(sample);
+    return successResponse(req, res, tenant);
   } catch (error) {
-    // logger.error(error);
-    // return errorResponse(req, res, "Cannot fetch samples.");
-    return res.status(500).send("Cannot fetch Tenants.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot fetch tenant.");
   }
 };
 
 const getTenant = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const sample = await tenantService.getTenantById(id);
-    return res.send(sample);
+    const tenant = await tenantService.getTenantById(id);
+    return successResponse(req, res, tenant);
   } catch (error) {
-    // logger.error(error);
-    return res.status(500).send("Cannot fetch Tenant.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot fetch Tenant.");
   }
 };
 
@@ -33,10 +34,10 @@ const createTenant = async (req, res) => {
     const tenant = new tenantInputModel.TenantDTO(req.body);
 
     const newTenant = await tenantService.createTenant(tenant);
-    return res.send(newTenant);
+    return successResponse(req, res, newTenant);
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot create Tenant.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot create Tenant.");
   }
 };
 
@@ -45,10 +46,10 @@ const updateTenant = async (req, res) => {
   try {
     const tenant = req.body;
     const newTenant = await tenantService.updateTenant(tenant);
-    return res.send(newTenant);
+    return successResponse(req, res, newTenant);
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot update Tenant.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot update Tenant.");
   }
 };
 
@@ -58,14 +59,14 @@ const deleteTenant = async (req, res) => {
     const id = Number(req.params.id);
     const status = await tenantService.deleteTenant(id);
     if (status == 0) {
-      return res.send("Tenant not found.");
+      return successResponse(req, res, "Tenant not found.", 404);
     }
     if (status == 1) {
-      return res.send("Tenant deleted successfully.");
+      return successResponse(req, res, "Tenant deleted successfully.");
     }
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot delete Tenant.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot delete Tenant.");
   }
 };
 

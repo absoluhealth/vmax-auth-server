@@ -1,4 +1,6 @@
 const appService = require("../services/application.service");
+const { successResponse, errorResponse } = require("../lib/helper");
+const { logger } = require("../helpers");
 
 const session = {};
 
@@ -6,11 +8,10 @@ const getApps = async (req, res) => {
   try {
     const app = await appService.getAllApps();
 
-    return res.send(app);
+    return successResponse(req, res, app);
   } catch (error) {
-    // logger.error(error);
-    // return errorResponse(req, res, "Cannot fetch apps.");
-    return res.status(500).send("Cannot fetch Apps.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot fetch apps.");
   }
 };
 
@@ -18,10 +19,10 @@ const getApp = async (req, res) => {
   try {
     const id = Number(req.params.id);
     const app = await appService.getAppById(id);
-    return res.send(app);
+    return successResponse(req, res, app);
   } catch (error) {
-    // logger.error(error);
-    return res.status(500).send("Cannot fetch App.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot fetch App.");
   }
 };
 
@@ -29,10 +30,10 @@ const createApp = async (req, res) => {
   try {
     const app = req.body;
     const newApp = await appService.createApp(app);
-    return res.send(newApp);
+    return successResponse(req, res, newApp);
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot create App.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot create App.");
   }
 };
 
@@ -40,10 +41,10 @@ const updateApp = async (req, res) => {
   try {
     const app = req.body;
     const newApp = await appService.updateApp(app);
-    return res.send(newApp);
+    return successResponse(req, res, newApp);
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot update App.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot update App.");
   }
 };
 
@@ -52,14 +53,14 @@ const deleteApp = async (req, res) => {
     const id = Number(req.params.id);
     const status = await appService.deleteApp(id);
     if (status == 0) {
-      return res.send("App not found.");
+      return successResponse(req, res, "App not found.");
     }
     if (status == 1) {
-      return res.send("App deleted.");
+      return successResponse(req, res, "App deleted.");
     }
   } catch (error) {
-    // logger.error(error);
-    return res.send("Cannot delete App.");
+    logger.error(error);
+    return errorResponse(req, res, "Cannot delete App.");
   }
 };
 

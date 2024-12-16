@@ -1,23 +1,27 @@
 const UserDTO = require("../dto/user.dto");
 const userService = require("../services/user.service");
+const { successResponse, errorResponse } = require("../lib/helper");
+const { logger } = require("../lib/helper");
 
 class UserController {
   static getUser(req, res) {
     try {
       const id = req.params.id;
       const user = userService.getUserById(id);
-      return res.json(user);
+      return successResponse(req, res, user);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 
   static getUsers(req, res) {
     try {
       const users = userService.getAllUser();
-      return res.json(users);
+      return successResponse(req, res, users);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 
@@ -26,9 +30,10 @@ class UserController {
       const user = new UserDTO(req.body);
       const newUser = userService.createUser(user);
 
-      return res.json(newUser);
+      return successResponse(req, res, newUser);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 
@@ -37,9 +42,10 @@ class UserController {
       const id = req.params.id;
       const user = req.body;
       const updatedUser = userService.updateUser(id, user);
-      return res.json(updatedUser);
+      return successResponse(req, res, updatedUser);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 
@@ -47,9 +53,10 @@ class UserController {
     try {
       const id = req.params.id;
       const user = userService.deleteUser(id);
-      return res.json(user);
+      return successResponse(req, res, user);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 

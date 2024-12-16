@@ -1,4 +1,6 @@
 const userAppMappingService = require("../services/user_app_mapping.service");
+const { successResponse, errorResponse } = require("../lib/helper");
+const { logger } = require("../lib/helper");
 
 class UserAppMappingController {
   static createUserAppMapping(req, res) {
@@ -6,9 +8,10 @@ class UserAppMappingController {
       const userAppMapping = req.body;
       const newUserAppMapping =
         userAppMappingService.createUserAppMapping(userAppMapping);
-      return res.json(newUserAppMapping);
+      return successResponse(req, res, newUserAppMapping);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 
@@ -16,9 +19,10 @@ class UserAppMappingController {
     try {
       const id = req.params.id;
       const userAppMapping = userAppMappingService.deleteUserAppMapping(id);
-      return res.json(userAppMapping);
+      return successResponse(req, res, userAppMapping);
     } catch (error) {
-      return res.status(500).json({ message: error.message });
+      logger.error(error);
+      return errorResponse(req, res, error.message);
     }
   }
 }

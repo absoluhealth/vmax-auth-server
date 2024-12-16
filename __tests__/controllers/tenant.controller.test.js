@@ -69,7 +69,7 @@ describe("Tenant Functions", () => {
     );
     const response = await request(app).get("/tenant");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockTenant);
+    expect(response.body.data).toEqual(mockTenant);
     expect(TenantModel.getAllTenant).toHaveBeenCalled();
   });
 
@@ -89,7 +89,7 @@ describe("Tenant Functions", () => {
     );
     const response = await request(app).get("/tenant/1");
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockTenant);
+    expect(response.body.data).toEqual(mockTenant);
     expect(TenantModel.getTenantById).toHaveBeenCalledWith(1);
   });
 
@@ -109,7 +109,7 @@ describe("Tenant Functions", () => {
     );
     const response = await request(app).post("/tenant").send(mockTenant);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockTenant);
+    expect(response.body.data).toEqual(mockTenant);
     expect(TenantModel.createTenant).toHaveBeenCalledWith(mockTenant);
   });
 
@@ -129,7 +129,7 @@ describe("Tenant Functions", () => {
     );
     const response = await request(app).put("/tenant").send(mockTenant);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockTenant);
+    expect(response.body.data).toEqual(mockTenant);
     expect(TenantModel.updateTenant).toHaveBeenCalledWith(mockTenant);
   });
 
@@ -149,7 +149,7 @@ describe("Tenant Functions", () => {
     );
     const response = await request(app).delete("/tenant/1");
     expect(response.status).toBe(200);
-    expect(response.text).toEqual("Tenant deleted successfully.");
+    expect(response.body.data).toEqual("Tenant deleted successfully.");
     expect(TenantModel.deleteTenant).toHaveBeenCalledWith(1);
   });
 
@@ -164,7 +164,7 @@ describe("Tenant Functions", () => {
     const response = await request(app).get("/tenant");
     expect(response.status).toBe(500);
     console.log(response.error);
-    expect(response.error.text).toEqual("Cannot fetch Tenants.");
+    expect(response.body.errorMessage).toEqual("Cannot fetch tenant.");
     expect(TenantModel.getAllTenant).toHaveBeenCalled();
   });
 });
