@@ -14,7 +14,16 @@ const deleteUserAppMapping = async (id) => {
   return deletedUserAppMapping;
 };
 
+const GetMappingsByUserId = async (userId) => {
+  const mappings = await UserAppMapping.findAll({
+    where: { user_id: userId },
+  });
+
+  return mappings;
+};
+
 module.exports = {
   createUserAppMapping,
   deleteUserAppMapping,
+  GetMappingsByUserId,
 };

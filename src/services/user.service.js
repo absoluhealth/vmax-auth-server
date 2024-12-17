@@ -40,10 +40,21 @@ const getUserByEmail = async (email, tenantId) => {
 };
 
 const updateUser = async (id, user) => {
-  const result = await User.update(
-    user, // Values to update
-    { where: { id: id } }
-  );
+  const result = await User.update(user, { where: { id: id } });
+  var mappings = await userAppMappingService.GetMappingsByUserId(id);
+
+  mappings.forEach((element) => {
+    if (user.app_map_ids.foundIndex((appId) => appId === element.app_id) <= 0)
+      userAppMappingService.deleteUserAppMapping(element.id);
+  });
+
+  user.app_map_ids.forEach((appId) => {
+    if (mappings.foundIndex((element) => appId === element.app_id) <= 0)
+      userAppMappingService.createUserAppMapping({
+        user_id: newUser.id,
+        app_id: appId,
+      });
+  });
 
   return result;
 };
