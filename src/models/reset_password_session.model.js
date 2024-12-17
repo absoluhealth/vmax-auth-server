@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const UserSession = sequelize.define(
-    "UserSession",
+  const ResetPasswordSession = sequelize.define(
+    "ResetPasswordSession",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       sessionId: {
         type: DataTypes.STRING,
       },
-      user: {
-        type: DataTypes.JSON,
+      email: {
+        type: DataTypes.STRING,
       },
       appId: {
         type: DataTypes.INTEGER,
@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "user_sessions",
+      tableName: "reset_password_sessions",
     }
   );
-  UserSession.associate = function (models) {
+  ResetPasswordSession.associate = function (models) {
     // associations can be defined here
   };
-  return UserSession;
+  return ResetPasswordSession;
 };

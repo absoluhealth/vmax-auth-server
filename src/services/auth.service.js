@@ -5,6 +5,7 @@ const Tenant = require("../models").Tenant;
 const App = require("../models").Application;
 const AppTenantMapping = require("../models").AppTenantMapping;
 const UserSession = require("../models").UserSession;
+const ResetPasswordSession = require("../models").ResetPasswordSession;
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -27,6 +28,10 @@ const users = [
 
 const generatePayload = (userId) => {};
 
+async function doForgotPassword(appId, email) {}
+
+async function resetPassword(params) {}
+
 async function doLogin(email, password, redirectURL, tenantId) {
   user = users.find(
     (a) => a.email == email && a.password == password && tenantId == tenantId
@@ -39,7 +44,7 @@ async function doLogin(email, password, redirectURL, tenantId) {
   const sessionId = uuid();
   const expiresAt = new Date(Date.now() + 1 * 15 * 60 * 1000);
   createUserSession({
-    identifier: sessionId,
+    sessionId: sessionId,
     user: user,
     appId: tenantId,
     expiresAt: expiresAt,
@@ -95,12 +100,37 @@ const getUserSessionById = async (id) => {
   const session = await UserSession.findOne({
     attributes: ["id", "user", "appId", "expiresAt"],
     where: {
-      identifier: id,
+      sessionId: id,
     },
   });
 
   return session;
 };
+
+async function validateToken(token) {
+  try {
+    if (token == null) {
+      return "Invalid token";
+    }
+
+    const session = await ResetPasswordSession.findOne({
+      attributes: ["id", "email", "appId", "expiresAt"],
+      where: {
+        sessionId: token,
+      },
+    });
+
+    if (session == null) {
+      return "Invalid token";
+    } else if (new Date(session.expiresAt) <= new Date()) {
+      return "Token expired";
+    }
+
+    return "";
+  } catch (error) {
+    throw new AunthenticationError("Invalid token");
+  }
+}
 
 module.exports = {
   doLogin,
@@ -109,4 +139,7 @@ module.exports = {
   getUserSessionById,
   createUserSession,
   deleteUserSession,
+  doForgotPassword,
+  resetPassword,
+  validateToken,
 };

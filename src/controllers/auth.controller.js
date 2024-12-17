@@ -44,7 +44,50 @@ async function login(req, res, next) {
 
   return res.render("login", {
     title: "SSO-Server | Login",
+    appId,
+    redirectUrl,
   });
+}
+
+async function forgotPassword(req, res, next) {
+  const { redirectUrl, appId } = req.query;
+
+  return res.render("forgotPassword", {
+    title: "SSO-Server | Forgot Password",
+  });
+}
+
+async function doForgotPassword(req, res, next) {
+  const { redirectUrl, appId } = req.query;
+  const { email } = req.body;
+
+  if (!email)
+    return res.status(400).json({
+      message: "Email is empty. Please pass a valid input. ",
+    });
+
+  try {
+    await authService.doForgotPassword(appId, email);
+    return res.status(200).json({ message: "Password reset link sent" });
+  } catch (exception) {
+    return next(exception);
+  }
+}
+
+async function resetPassword(req, res, next) {
+  const { token } = req.query;
+  var error = await authService.validateToken(token);
+
+  return res.render("resetPassword", {
+    title: "SSO-Server | Reset Password",
+    token,
+    error,
+  });
+}
+
+async function doResetPassword(req, res, next) {
+  const { token } = req.query;
+  const { password } = req.body;
 }
 
 async function doLogin(req, res, next) {
@@ -143,4 +186,13 @@ async function logout(req, res, next) {
   return errorResponse(req, res, "Success");
 }
 
-module.exports = { login, doLogin, getToken, logout };
+module.exports = {
+  login,
+  doLogin,
+  getToken,
+  logout,
+  forgotPassword,
+  doForgotPassword,
+  resetPassword,
+  doResetPassword,
+};
