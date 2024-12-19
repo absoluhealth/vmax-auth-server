@@ -1,5 +1,5 @@
 class UserDTO {
-  constructor(
+  constructor({
     id,
     username,
     identity_id,
@@ -7,8 +7,8 @@ class UserDTO {
     email,
     first_name,
     last_name,
-    app_map_ids
-  ) {
+    app_map_ids,
+  }) {
     this.id = id;
     this.username = username;
     this.identity_id = identity_id;

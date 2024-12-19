@@ -37,7 +37,7 @@
         z-index: 2;
       }
       .form-signin input[type="email"] {
-        margin-bottom: -1px;
+        margin-bottom: 10px;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
       }
@@ -95,6 +95,19 @@
       function getQueryString() {
         return window.location.search; // Returns query string (e.g., ?key1=value1&key2=value2)
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const emailInput = document.getElementById("inputEmail");
+        const passwordInput = document.getElementById("inputPassword");
+        const errorMessage = document.getElementById("errorMessage");
+
+        function clearErrorMessage() {
+          errorMessage.textContent = "";
+        }
+
+        emailInput.addEventListener("input", clearErrorMessage);
+        passwordInput.addEventListener("input", clearErrorMessage);
+      });
 
       document
         .getElementById("loginForm")

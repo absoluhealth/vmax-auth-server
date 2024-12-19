@@ -76,11 +76,17 @@ async function doForgotPassword(req, res, next) {
 
 async function resetPassword(req, res, next) {
   const { token } = req.query;
+  var disable = false;
   var error = await authService.validateToken(token);
+
+  if (error !== "") {
+    disable = true;
+  }
 
   return res.render("resetPassword", {
     title: "SSO-Server | Reset Password",
     token,
+    disable,
     error,
   });
 }

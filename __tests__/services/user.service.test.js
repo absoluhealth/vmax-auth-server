@@ -10,18 +10,22 @@ const {
 
 const { User } = require("../../src/models");
 
-jest.mock("../../src/models", () => ({
-  User: {
-    findAll: jest.fn().mockResolvedValue([]),
-    findByPk: jest.fn().mockResolvedValue(null),
-    findOne: jest.fn().mockResolvedValue(null),
-    create: jest.fn().mockResolvedValue({
-      /* mock created instance */
-    }),
-    update: jest.fn().mockResolvedValue({}),
-    destroy: jest.fn().mockResolvedValue(1),
-  },
-}));
+jest.mock("../../src/models", () => {
+  const originalModule = jest.requireActual("../../src/models");
+  return {
+    ...originalModule,
+    User: {
+      findAll: jest.fn().mockResolvedValue([]),
+      findByPk: jest.fn().mockResolvedValue(null),
+      findOne: jest.fn().mockResolvedValue(null),
+      create: jest.fn().mockResolvedValue({
+        /* mock created instance */
+      }),
+      update: jest.fn().mockResolvedValue({}),
+      destroy: jest.fn().mockResolvedValue(1),
+    },
+  };
+});
 
 describe("User Functions", () => {
   afterEach(() => {

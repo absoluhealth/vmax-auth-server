@@ -15,9 +15,9 @@ class UserController {
     }
   }
 
-  static getUsers(req, res) {
+  static async getUsers(req, res) {
     try {
-      const users = userService.getAllUser();
+      const users = await userService.getAllUser();
       return successResponse(req, res, users);
     } catch (error) {
       logger.error(error);
@@ -25,10 +25,10 @@ class UserController {
     }
   }
 
-  static createUser(req, res) {
+  static async createUser(req, res) {
     try {
       const user = new UserDTO(req.body);
-      const newUser = userService.createUser(user);
+      const newUser = await userService.createUser(user);
 
       return successResponse(req, res, newUser);
     } catch (error) {
@@ -37,11 +37,11 @@ class UserController {
     }
   }
 
-  static updateUser(req, res) {
+  static async updateUser(req, res) {
     try {
       const id = req.params.id;
       const user = req.body;
-      const updatedUser = userService.updateUser(id, user);
+      const updatedUser = await userService.updateUser(id, user);
       return successResponse(req, res, updatedUser);
     } catch (error) {
       logger.error(error);
@@ -49,20 +49,16 @@ class UserController {
     }
   }
 
-  static deleteUser(req, res) {
+  static async deleteUser(req, res) {
     try {
       const id = req.params.id;
-      const user = userService.deleteUser(id);
+      const user = await userService.deleteUser(id);
       return successResponse(req, res, user);
     } catch (error) {
       logger.error(error);
       return errorResponse(req, res, error.message);
     }
   }
-
-  static changePassword(req, res) {}
-
-  static resetPassword(req, res) {}
 }
 
 module.exports = UserController;

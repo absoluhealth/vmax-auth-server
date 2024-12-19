@@ -6,6 +6,9 @@ const App = require("../models").Application;
 const AppTenantMapping = require("../models").AppTenantMapping;
 const UserSession = require("../models").UserSession;
 const ResetPasswordSession = require("../models").ResetPasswordSession;
+const userService = require("./user.service");
+const userAppMappingService = require("./user_app_mapping.service");
+const e = require("express");
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -28,7 +31,34 @@ const users = [
 
 const generatePayload = (userId) => {};
 
-async function doForgotPassword(appId, email) {}
+async function doForgotPassword(appId, email) {
+  const user = await userService.getUserByEmail(email);
+
+  if (!user) {
+    throw new AunthenticationError("User not found");
+  }
+
+  const apps = await userAppMappingService.GetMappingsByUserId(user.id);
+
+  const app = apps?.find((a) => a.app_id == appId);
+  if (!app) {
+    throw new AuthenticationError("User not authorized for this app");
+  }
+
+  const sessionId = uuid();
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+  const resetPasswordSession = {
+    sessionId: sessionId,
+    email: email,
+    appId: appId,
+    expiresAt: expiresAt,
+  };
+
+  const result = await ResetPasswordSession.create(resetPasswordSession);
+
+  return result;
+}
 
 async function resetPassword(params) {}
 

@@ -7,9 +7,7 @@ router
   .get("/:id", UserController.getUser)
   .post("/", UserController.createUser)
   .put("/", UserController.updateUser)
-  .delete("/", UserController.deleteUser)
-  .put("/:id/change-password", UserController.changePassword)
-  .put("/:id/resetpassword", UserController.resetPassword);
+  .delete("/", UserController.deleteUser);
 
 /**
  * @swagger

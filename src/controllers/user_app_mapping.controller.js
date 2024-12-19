@@ -15,7 +15,7 @@ class UserAppMappingController {
     }
   }
 
-  static deleteUserAppMapping(req, res) {
+  static DeleteUserAppMapping(req, res) {
     try {
       const id = req.params.id;
       const userAppMapping = userAppMappingService.deleteUserAppMapping(id);

@@ -16,7 +16,7 @@ const getUserById = async (id) => {
   return user;
 };
 
-const getUserByEmail = async (email, tenantId) => {
+const getUserByEmail = async (email) => {
   const user = await User.findOne({
     attributes: [
       "id",
@@ -28,11 +28,9 @@ const getUserByEmail = async (email, tenantId) => {
       "identity_id",
       "invalid_login_attempts",
       "is_locked",
-      "tenant_id",
     ],
     where: {
       email: email,
-      tenant_id: tenantId,
     },
   });
 

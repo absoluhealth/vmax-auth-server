@@ -4,6 +4,6 @@ const UserAppMappingController = require("../controllers/user_app_mapping.contro
 
 router
   .post("/", UserAppMappingController.createUserAppMapping)
-  .delete("/:id", UserAppMappingController.deleteUserAppMapping);
+  .delete("/:id", UserAppMappingController.DeleteUserAppMapping);
 
 module.exports = router;
