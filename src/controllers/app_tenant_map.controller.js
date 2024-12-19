@@ -1,4 +1,4 @@
-const appService = require("../services/application.service");
+const appService = require("../services/app_tenant_mapping.service");
 const { successResponse, errorResponse } = require("../lib/helper");
 const { logger } = require("../lib/helper");
 
@@ -6,7 +6,7 @@ const session = {};
 
 const getMappings = async (req, res) => {
   try {
-    const app = await appService.getallApps();
+    const app = await appService.getAllMappings();
     return successResponse(req, res, app);
   } catch (error) {
     logger.error(error);
@@ -17,7 +17,7 @@ const getMappings = async (req, res) => {
 const getMapping = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const app = await appService.getAppById(id);
+    const app = await appService.getMappingById(id);
     return successResponse(req, res, app);
   } catch (error) {
     logger.error(error);
@@ -28,7 +28,7 @@ const getMapping = async (req, res) => {
 const createMapping = async (req, res) => {
   try {
     const app = req.body;
-    const newApp = await appService.createApp(app);
+    const newApp = await appService.createMapping(app);
     return successResponse(req, res, newApp);
   } catch (error) {
     logger.error(error);
@@ -39,7 +39,7 @@ const createMapping = async (req, res) => {
 const updateMapping = async (req, res) => {
   try {
     const app = req.body;
-    const newApp = await appService.updateApp(app);
+    const newApp = await appService.updateMapping(app);
     return successResponse(req, res, newApp);
   } catch (error) {
     logger.error(error);
@@ -50,7 +50,7 @@ const updateMapping = async (req, res) => {
 const deleteMapping = async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const status = await appService.deleteApp(id);
+    const status = await appService.deleteMapping(id);
     if (status == 0) {
       return successResponse(req, res, "App not found.", 404);
     }
