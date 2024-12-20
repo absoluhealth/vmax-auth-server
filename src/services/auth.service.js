@@ -3,14 +3,11 @@ const AunthenticationError = require("../helpers/exception");
 const jwt = require("jsonwebtoken");
 const Tenant = require("../models").Tenant;
 const App = require("../models").Application;
-const AppTenantMapping = require("../models").AppTenantMapping;
 const UserSession = require("../models").UserSession;
 const ResetPasswordSession = require("../models").ResetPasswordSession;
 const userService = require("./user.service");
 const userAppMappingService = require("./user_app_mapping.service");
 const e = require("express");
-const { sendEmail } = require("./email.service");
-const { getResetPasswordEmail } = require("../templates/templates.service");
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -97,7 +94,7 @@ async function generateToken(user) {
 }
 
 async function validateAppId(appId, redirectURL) {
-  const app = await AppTenantMapping.findByPk(appId);
+  const app = await mappingService.getMappingById(appId);
   if (app != null) {
     if (app.status === "active") {
       if (app.login_redirect_uri != redirectURL) {
@@ -169,6 +166,31 @@ async function validateToken(token) {
   }
 }
 
+async function doResetPassword(token, password) {
+  if (token == null) {
+    return "Invalid token";
+  }
+
+  const session = await ResetPasswordSession.findOne({
+    attributes: ["id", "email", "appId", "expiresAt"],
+    where: {
+      sessionId: token,
+    },
+  });
+
+  if (session == null) {
+    return "Invalid token";
+  } else if (new Date(session.expiresAt) <= new Date()) {
+    return "Token expired";
+  }
+
+  const user = await userService.getUserByEmail(session.email);
+
+  const appMapping = await mappingService.getMappingById(session.appId);
+
+  return { appId: session.appId, redirectUrl: appMapping.login_redirect_uri };
+}
+
 module.exports = {
   doLogin,
   generateToken,
@@ -179,4 +201,5 @@ module.exports = {
   doForgotPassword,
   resetPassword,
   validateToken,
+  doResetPassword,
 };

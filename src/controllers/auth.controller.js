@@ -94,6 +94,19 @@ async function resetPassword(req, res, next) {
 async function doResetPassword(req, res, next) {
   const { token } = req.query;
   const { password } = req.body;
+
+  const { appId, redirectUrl } = await authService.doResetPassword(
+    token,
+    password
+  );
+
+  return res
+    .status(200)
+    .json({
+      message: "Password updated successfully.",
+      appId: appId,
+      redirectUrl: redirectUrl,
+    });
 }
 
 async function doLogin(req, res, next) {
