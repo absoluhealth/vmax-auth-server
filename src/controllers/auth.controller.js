@@ -67,7 +67,7 @@ async function doForgotPassword(req, res, next) {
     });
 
   try {
-    await authService.doForgotPassword(appId, email);
+    await authService.doForgotPassword(appId, email, req.headers.host);
     return res.status(200).json({ message: "Password reset link sent" });
   } catch (exception) {
     return next(exception);

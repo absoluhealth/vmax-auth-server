@@ -64,10 +64,22 @@ const deleteApp = async (req, res) => {
   }
 };
 
+const getTest = async (req, res) => {
+  try {
+    const app = req.headers.host;
+
+    return successResponse(req, res, app);
+  } catch (error) {
+    logger.error(error);
+    return errorResponse(req, res, error);
+  }
+};
+
 module.exports = {
   getApps,
   getApp,
   createApp,
   updateApp,
   deleteApp,
+  getTest,
 };

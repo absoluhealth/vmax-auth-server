@@ -9,6 +9,8 @@ const ResetPasswordSession = require("../models").ResetPasswordSession;
 const userService = require("./user.service");
 const userAppMappingService = require("./user_app_mapping.service");
 const e = require("express");
+const { sendEmail } = require("./email.service");
+const { getResetPasswordEmail } = require("../templates/templates.service");
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
@@ -31,7 +33,7 @@ const users = [
 
 const generatePayload = (userId) => {};
 
-async function doForgotPassword(appId, email) {
+async function doForgotPassword(appId, email, host) {
   const user = await userService.getUserByEmail(email);
 
   if (!user) {
@@ -47,6 +49,7 @@ async function doForgotPassword(appId, email) {
 
   const sessionId = uuid();
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const link = `http://${host}/api/auth/reset-password?token=${sessionId}`;
 
   const resetPasswordSession = {
     sessionId: sessionId,
@@ -56,6 +59,10 @@ async function doForgotPassword(appId, email) {
   };
 
   const result = await ResetPasswordSession.create(resetPasswordSession);
+
+  const template = getResetPasswordEmail(link);
+
+  await sendEmail(email, "Password Reset Request", template);
 
   return result;
 }
