@@ -8,6 +8,8 @@ const ResetPasswordSession = require("../models").ResetPasswordSession;
 const userService = require("./user.service");
 const userAppMappingService = require("./user_app_mapping.service");
 const e = require("express");
+const { sendEmail } = require("./email.service");
+const { getResetPasswordEmail } = require("../templates/templates.service");
 
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 
